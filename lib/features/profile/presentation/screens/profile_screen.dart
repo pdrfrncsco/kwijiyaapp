@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/providers/core_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -128,6 +129,30 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
 
                 // Settings / Actions
+                Consumer(
+                  builder: (context, ref, child) {
+                    final soundService = ref.watch(soundServiceProvider);
+                    return SwitchListTile(
+                      secondary: Icon(
+                        soundService.isMuted
+                            ? Icons.volume_off
+                            : Icons.volume_up,
+                        color: AppColors.textPrimary,
+                      ),
+                      title: const Text(
+                        'Efeitos Sonoros',
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      value: !soundService.isMuted,
+                      onChanged: (val) => soundService.toggleMute(),
+                      contentPadding: EdgeInsets.zero,
+                    );
+                  },
+                ),
+                const Divider(),
                 _SettingsTile(
                   icon: Icons.language,
                   title: 'Mudar Língua',

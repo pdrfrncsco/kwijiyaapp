@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/providers/core_providers.dart';
 import '../providers/quiz_providers.dart';
 import 'quiz_question_view.dart';
 import 'quiz_result_view.dart';
@@ -29,7 +30,14 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       ref
           .read(quizControllerProvider.notifier)
           .startQuiz(widget.languageCode, widget.level);
+      ref.read(soundServiceProvider).startBackgroundMusic();
     });
+  }
+
+  @override
+  void dispose() {
+    ref.read(soundServiceProvider).stopBackgroundMusic();
+    super.dispose();
   }
 
   @override
@@ -133,19 +141,31 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   }
 }
 
-class _QuizSummaryView extends StatelessWidget {
+class _QuizSummaryView extends ConsumerStatefulWidget {
   final Map<String, dynamic> summary;
   final VoidCallback onHome;
 
   const _QuizSummaryView({required this.summary, required this.onHome});
 
   @override
+  ConsumerState<_QuizSummaryView> createState() => _QuizSummaryViewState();
+}
+
+class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(soundServiceProvider).stopBackgroundMusic();
+    ref.read(soundServiceProvider).playSuccess();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final totalXp = summary['total_xp'] ?? 0;
-    final totalMakuta = summary['total_makuta'] ?? 0;
-    final accuracy = summary['accuracy'] ?? 0.0;
-    final correct = summary['correct'] ?? 0;
-    final total = summary['total'] ?? 0;
+    final totalXp = widget.summary['total_xp'] ?? 0;
+    final totalMakuta = widget.summary['total_makuta'] ?? 0;
+    final accuracy = widget.summary['accuracy'] ?? 0.0;
+    final correct = widget.summary['correct'] ?? 0;
+    final total = widget.summary['total'] ?? 0;
 
     return Center(
       child: Padding(
@@ -195,11 +215,11 @@ class _QuizSummaryView extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: onHome,
+                onPressed: widget.onHome,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Voltar ao Dashboard'),
+                child: const Text('Voltar ao Início'),
               ),
             ),
           ],

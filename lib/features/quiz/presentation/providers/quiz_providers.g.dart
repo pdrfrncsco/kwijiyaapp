@@ -42,7 +42,7 @@ final quizRepositoryProvider = AutoDisposeProvider<QuizRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef QuizRepositoryRef = AutoDisposeProviderRef<QuizRepository>;
-String _$quizControllerHash() => r'7ab2ec9b1c3b7ebd470362e555bd7267ad505723';
+String _$quizControllerHash() => r'86579878793977d5c1b75782a2997797aa09a1c1';
 
 /// See also [QuizController].
 @ProviderFor(QuizController)

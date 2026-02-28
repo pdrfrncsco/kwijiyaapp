@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/quiz_entities.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/providers/core_providers.dart';
 
-class QuizQuestionView extends StatefulWidget {
+class QuizQuestionView extends ConsumerStatefulWidget {
   final QuizQuestion question;
   final int totalQuestions;
   final int currentIndex;
@@ -20,10 +22,10 @@ class QuizQuestionView extends StatefulWidget {
   });
 
   @override
-  State<QuizQuestionView> createState() => _QuizQuestionViewState();
+  ConsumerState<QuizQuestionView> createState() => _QuizQuestionViewState();
 }
 
-class _QuizQuestionViewState extends State<QuizQuestionView> {
+class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
   late Timer _timer;
   late double _timeLeft;
   late double _totalTime;
@@ -44,23 +46,35 @@ class _QuizQuestionViewState extends State<QuizQuestionView> {
   }
 
   void _startTimer() {
-    _totalTime = widget.question.timerSeconds.toDouble();
+    _totalTime = widget.question.difficulty == 1
+        ? 15.0
+        : widget.question.timerSeconds.toDouble();
     _timeLeft = _totalTime;
 
     _timer = Timer.periodic(Duration(milliseconds: _tickIntervalMs), (timer) {
       if (!mounted) return;
+
+      final oldTime = _timeLeft;
       setState(() {
         _timeLeft -= (_tickIntervalMs / 1000);
-        if (_timeLeft <= 0) {
-          _timeLeft = 0;
-          timer.cancel();
-          // Auto-submit or handle timeout?
-          // For now, let's just stop. Or maybe auto-submit as wrong?
-          // Backend doesn't support "no answer" submission easily without optionId.
-          // We can handle timeout in the parent or force user to select something.
-        }
+        if (_timeLeft < 0) _timeLeft = 0;
       });
+
+      // Play sound logic
+      if (_timeLeft > 0 && _timeLeft.ceil() < oldTime.ceil()) {
+        ref.read(soundServiceProvider).playTick();
+      }
+
+      if (_timeLeft <= 0) {
+        _timer.cancel();
+      }
     });
+  }
+
+  Color _getTimerColor() {
+    if (_timeLeft > 10) return AppColors.success; // Greenish/Safe
+    if (_timeLeft > 5) return Colors.amber; // Warning
+    return AppColors.error; // Critical
   }
 
   @override
@@ -71,6 +85,7 @@ class _QuizQuestionViewState extends State<QuizQuestionView> {
 
   void _handleOptionTap(String optionId) {
     _timer.cancel();
+    ref.read(soundServiceProvider).playClick();
     double timeTaken = _totalTime - _timeLeft;
     // Ensure at least some time is recorded
     if (timeTaken < 0.1) timeTaken = 0.1;
@@ -121,10 +136,17 @@ class _QuizQuestionViewState extends State<QuizQuestionView> {
                 child: Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: _timeLeft < 3
-                        ? AppColors.error
-                        : AppColors.secondary,
+                    color: _getTimerColor(),
                     borderRadius: BorderRadius.circular(3),
+                    boxShadow: _timeLeft <= 5
+                        ? [
+                            BoxShadow(
+                              color: AppColors.error.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ]
+                        : null,
                   ),
                 ),
               ),
