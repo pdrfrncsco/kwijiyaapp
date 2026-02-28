@@ -14,9 +14,9 @@ class ApiClient {
         BaseOptions(
           baseUrl: kIsWeb
               ? AppConstants.baseUrlWeb
-              : (Platform.isAndroid
-                    ? AppConstants.baseUrlAndroid
-                    : AppConstants.baseUrlIOS),
+              : Platform.isAndroid
+              ? AppConstants.baseUrlAndroid
+              : AppConstants.baseUrlIOS,
           connectTimeout: const Duration(
             milliseconds: AppConstants.connectTimeout,
           ),
