@@ -1,0 +1,22 @@
+// ignore_for_file: invalid_annotation_target
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'user.freezed.dart';
+part 'user.g.dart';
+
+@freezed
+class User with _$User {
+  const factory User({
+    required String id,
+    String? email,
+    String? username,
+    @JsonKey(name: 'is_guest') required bool isGuest,
+    @JsonKey(name: 'total_xp') required int totalXp,
+    required int level,
+    required int coins, // Makuta
+    @JsonKey(name: 'streak_days') required int streakDays,
+    String? avatar,
+  }) = _User;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
