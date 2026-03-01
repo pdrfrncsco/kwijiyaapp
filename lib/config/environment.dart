@@ -1,7 +1,7 @@
 enum EnvironmentType { dev, prod }
 
 class Environment {
-  static const String _defaultUrl = 'http://10.0.2.2:8000/api/v1';
+  static const String _defaultUrl = 'http://127.0.0.1:8000/api/v1';
   static const String _prodUrl = 'https://kwijiyapi.ndeas.cloud/api/v1';
 
   static EnvironmentType get current {
