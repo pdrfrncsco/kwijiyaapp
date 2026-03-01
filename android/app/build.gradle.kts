@@ -1,20 +1,24 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val keystoreProperties = java.util.Properties()
+val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(java.io.FileInputStream(keystorePropertiesFile))
+val hasReleaseKeystore = keystorePropertiesFile.exists()
+if (hasReleaseKeystore) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "com.ndeascloud.kwijiya"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-    buildDir = file("D:/ndeascloud/kwijiya/kwijiyaapp/build/app")
+    ndkVersion = "29.0.14206865" // flutter.ndkVersion
+    // buildDir = file("D:/ndeascloud/kwijiya/kwijiyaapp/build/app")
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -37,17 +41,29 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String?
-            keyPassword = keystoreProperties["keyPassword"] as String?
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String?
+        if (hasReleaseKeystore) {
+            create("release") {
+                val keyAliasProp = keystoreProperties["keyAlias"] as String?
+                val keyPasswordProp = keystoreProperties["keyPassword"] as String?
+                val storeFileProp = keystoreProperties["storeFile"] as String?
+                val storePasswordProp = keystoreProperties["storePassword"] as String?
+
+                keyAlias = keyAliasProp
+                keyPassword = keyPasswordProp
+                storeFile = storeFileProp?.let { file(it) }
+                storePassword = storePasswordProp
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                // Fallback para debug keystore se ainda não existir key.properties
+                signingConfigs.getByName("debug")
+            }
             proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
