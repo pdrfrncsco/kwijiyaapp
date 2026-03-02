@@ -18,11 +18,6 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -43,3 +38,130 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
+
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
+
+# Local configuration that shouldn't be shared
+*.local
+
+### Flutter ###
+# Flutter/Dart build files and dependencies
+
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+.pub-cache/
+.pub/
+/build/
+.metadata
+*.freezed.dart
+
+*.g.dart
+*.mocks.dart
+*.lock
+*.log
+*.pyc
+
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+
+.svn/
+*.iml
+*.iws
+.idea/
+.metadata
+
+/ios/ /profile
+**/ios/Flutter/.last_build_id
+**/android/gradlew
+**/android/gradlew.bat
+
+### C ###
+# c specific files
+
+*.o
+*.out
+*.a
+
+### Cmake ###
+# CMake build system files and cache
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeTmp/
+
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+CTestTestfile.cmake
+_deps/
+build/
+bin/
+
+*.cmake
+CMakeUserPresets.json
+CMakeSettings.json
+CMakePresets.json
+CMakeLists.txt.user
+
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
+_CPack_Packages/
+DartConfiguration.tcl
+CMakeDoxygen.in
+
+CMakeCache.txt.prev
+CMakeLists.txt.user.*
+cmake-build-*/
+_build/
+-prefix/
+
+CMakeUserPresets.json
+
+### Swift ###
+# swift specific files
+
+build/
+.build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+timeline.xctimeline
+Packages/
+*.xcarchive
+Dependencies/
+.accio/
+
+*.o
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+### Shell ###
+# shell specific files
+
+*.sh~
+*.shell_history
+

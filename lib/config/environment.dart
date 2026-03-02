@@ -1,22 +1,19 @@
-enum EnvironmentType { dev, prod }
+import 'package:flutter/foundation.dart';
 
 class Environment {
-  static const String _defaultUrl = 'http://127.0.0.1:8000/api/v1';
-  static const String _prodUrl = 'https://kwijiyapi.ndeas.cloud/api/v1';
+  static const bool isDev = false;
 
-  static EnvironmentType get current {
-    const env = String.fromEnvironment('ENV', defaultValue: 'dev');
-    return env == 'prod' ? EnvironmentType.prod : EnvironmentType.dev;
-  }
-
-  static String get apiUrl {
-    if (current == EnvironmentType.prod) {
-      return _prodUrl;
+  static String get baseUrl {
+    if (isDev) {
+      if (kIsWeb) return 'http://127.0.0.1:8005';
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        return 'http://10.0.2.2:8005';
+      }
+      return 'http://127.0.0.1:8005';
+    } else {
+      return 'https://kwijiyapi.ndeas.cloud';
     }
-    // Fallback or dev logic
-    return const String.fromEnvironment('API_URL', defaultValue: _defaultUrl);
   }
 
-  static bool get isProd => current == EnvironmentType.prod;
-  static bool get isDev => current == EnvironmentType.dev;
+  static String get apiUrl => '$baseUrl/api/v1';
 }

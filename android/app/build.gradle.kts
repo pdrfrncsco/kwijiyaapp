@@ -18,7 +18,7 @@ android {
     namespace = "com.ndeascloud.kwijiya"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "29.0.14206865" // flutter.ndkVersion
-    // buildDir = file("D:/ndeascloud/kwijiya/kwijiyaapp/build/app")
+    buildDir = file("D:/ndeascloud/apps/kwijiya/kwijiyaapp/build/app")
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
