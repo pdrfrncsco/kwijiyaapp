@@ -99,8 +99,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         data: (user) {
           if (user != null) {
             if (user.placementTestCompleted) {
+              // User already completed placement test, go to language selection
               context.go('/languages');
             } else {
+              // New user, go to placement test
               context.go('/placement-test');
             }
           }
@@ -137,7 +139,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Aprenda línguas nacionais de Angola',
+                  'Aprenda jogando as línguas nacionais de Angola',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,

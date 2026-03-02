@@ -58,10 +58,19 @@ class _PlacementTestScreenState extends ConsumerState<PlacementTestScreen> {
           _error = e.toString();
           _isLoading = false;
         }),
-        (questions) => setState(() {
-          _questions = questions;
-          _isLoading = false;
-        }),
+        (questions) {
+          if (questions.isEmpty) {
+            // Check if it was because already completed (API might return empty list or specific error handled in repo)
+            // Ideally repo should handle the 'completed' status.
+            // For now, if empty, assume completed or error, redirect to dashboard/languages
+            context.go('/languages');
+            return;
+          }
+          setState(() {
+            _questions = questions;
+            _isLoading = false;
+          });
+        },
       );
     } catch (e) {
       setState(() {

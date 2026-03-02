@@ -42,6 +42,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       final user = authState.value;
       if (user != null) {
         if (user.placementTestCompleted) {
+          // If placement test is completed, check if they are trying to access placement test
+          // This logic is simplified here as we just redirect based on status
           context.go('/languages');
         } else {
           context.go('/placement-test');

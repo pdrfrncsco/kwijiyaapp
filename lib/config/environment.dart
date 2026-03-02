@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Environment {
-  static const bool isDev = false;
+  static const bool isDev = true;
 
   static String get baseUrl {
     if (isDev) {

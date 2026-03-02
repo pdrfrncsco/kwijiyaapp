@@ -176,8 +176,11 @@ class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
     if (leveledUp) {
       ref.read(soundServiceProvider).playLevelUp();
       _confettiController.play();
+      // Show dialog only after build is complete
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showLevelUpDialog();
+        if (mounted) {
+          _showLevelUpDialog();
+        }
       });
     } else {
       ref.read(soundServiceProvider).playSuccess();
@@ -247,15 +250,22 @@ class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.check_circle,
                   size: 80,
-                  color: AppColors.success,
+                  color: widget.summary['leveled_up'] == true
+                      ? AppColors.primary
+                      : AppColors.success,
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Sessão Concluída!',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                Text(
+                  widget.summary['leveled_up'] == true
+                      ? 'Nível Subiu!'
+                      : 'Sessão Concluída!',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(

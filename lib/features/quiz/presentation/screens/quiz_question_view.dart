@@ -103,6 +103,10 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
 
   @override
   Widget build(BuildContext context) {
+    // Randomize options order - create a copy to avoid modifying the original list
+    final options = List.of(widget.question.options)..shuffle();
+    final optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -173,7 +177,13 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
             ),
           ),
           const SizedBox(height: 48),
-          ...widget.question.options.map((option) {
+          ...options.asMap().entries.map((entry) {
+            final index = entry.key;
+            final option = entry.value;
+            final letter = index < optionLetters.length
+                ? optionLetters[index]
+                : '';
+
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: ElevatedButton(
@@ -192,14 +202,40 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  alignment:
+                      Alignment.centerLeft, // Align content to start for prefix
                 ),
-                child: Text(
-                  option.text,
-                  style: TextStyle(
-                    fontSize: 18 * widget.config.fontSizeMultiplier,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.primary, width: 1),
+                      ),
+                      child: Text(
+                        letter,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        option.text,
+                        style: TextStyle(
+                          fontSize: 18 * widget.config.fontSizeMultiplier,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
