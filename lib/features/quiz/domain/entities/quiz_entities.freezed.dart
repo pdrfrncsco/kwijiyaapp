@@ -23,6 +23,8 @@ QuizOption _$QuizOptionFromJson(Map<String, dynamic> json) {
 mixin _$QuizOption {
   String get id => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_correct')
+  bool? get isCorrect => throw _privateConstructorUsedError;
 
   /// Serializes this QuizOption to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +43,11 @@ abstract class $QuizOptionCopyWith<$Res> {
     $Res Function(QuizOption) then,
   ) = _$QuizOptionCopyWithImpl<$Res, QuizOption>;
   @useResult
-  $Res call({String id, String text});
+  $Res call({
+    String id,
+    String text,
+    @JsonKey(name: 'is_correct') bool? isCorrect,
+  });
 }
 
 /// @nodoc
@@ -58,7 +64,11 @@ class _$QuizOptionCopyWithImpl<$Res, $Val extends QuizOption>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? id = null, Object? text = null}) {
+  $Res call({
+    Object? id = null,
+    Object? text = null,
+    Object? isCorrect = freezed,
+  }) {
     return _then(
       _value.copyWith(
             id: null == id
@@ -69,6 +79,10 @@ class _$QuizOptionCopyWithImpl<$Res, $Val extends QuizOption>
                 ? _value.text
                 : text // ignore: cast_nullable_to_non_nullable
                       as String,
+            isCorrect: freezed == isCorrect
+                ? _value.isCorrect
+                : isCorrect // ignore: cast_nullable_to_non_nullable
+                      as bool?,
           )
           as $Val,
     );
@@ -84,7 +98,11 @@ abstract class _$$QuizOptionImplCopyWith<$Res>
   ) = __$$QuizOptionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String text});
+  $Res call({
+    String id,
+    String text,
+    @JsonKey(name: 'is_correct') bool? isCorrect,
+  });
 }
 
 /// @nodoc
@@ -100,7 +118,11 @@ class __$$QuizOptionImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? id = null, Object? text = null}) {
+  $Res call({
+    Object? id = null,
+    Object? text = null,
+    Object? isCorrect = freezed,
+  }) {
     return _then(
       _$QuizOptionImpl(
         id: null == id
@@ -111,6 +133,10 @@ class __$$QuizOptionImplCopyWithImpl<$Res>
             ? _value.text
             : text // ignore: cast_nullable_to_non_nullable
                   as String,
+        isCorrect: freezed == isCorrect
+            ? _value.isCorrect
+            : isCorrect // ignore: cast_nullable_to_non_nullable
+                  as bool?,
       ),
     );
   }
@@ -119,7 +145,11 @@ class __$$QuizOptionImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$QuizOptionImpl implements _QuizOption {
-  const _$QuizOptionImpl({required this.id, required this.text});
+  const _$QuizOptionImpl({
+    required this.id,
+    required this.text,
+    @JsonKey(name: 'is_correct') this.isCorrect,
+  });
 
   factory _$QuizOptionImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuizOptionImplFromJson(json);
@@ -128,10 +158,13 @@ class _$QuizOptionImpl implements _QuizOption {
   final String id;
   @override
   final String text;
+  @override
+  @JsonKey(name: 'is_correct')
+  final bool? isCorrect;
 
   @override
   String toString() {
-    return 'QuizOption(id: $id, text: $text)';
+    return 'QuizOption(id: $id, text: $text, isCorrect: $isCorrect)';
   }
 
   @override
@@ -140,12 +173,14 @@ class _$QuizOptionImpl implements _QuizOption {
         (other.runtimeType == runtimeType &&
             other is _$QuizOptionImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.text, text) || other.text == text));
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.isCorrect, isCorrect) ||
+                other.isCorrect == isCorrect));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, text);
+  int get hashCode => Object.hash(runtimeType, id, text, isCorrect);
 
   /// Create a copy of QuizOption
   /// with the given fields replaced by the non-null parameter values.
@@ -165,6 +200,7 @@ abstract class _QuizOption implements QuizOption {
   const factory _QuizOption({
     required final String id,
     required final String text,
+    @JsonKey(name: 'is_correct') final bool? isCorrect,
   }) = _$QuizOptionImpl;
 
   factory _QuizOption.fromJson(Map<String, dynamic> json) =
@@ -174,6 +210,9 @@ abstract class _QuizOption implements QuizOption {
   String get id;
   @override
   String get text;
+  @override
+  @JsonKey(name: 'is_correct')
+  bool? get isCorrect;
 
   /// Create a copy of QuizOption
   /// with the given fields replaced by the non-null parameter values.

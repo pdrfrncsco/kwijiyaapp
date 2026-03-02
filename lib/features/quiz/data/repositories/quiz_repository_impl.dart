@@ -9,7 +9,10 @@ class QuizRepositoryImpl implements QuizRepository {
   QuizRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Exception, QuizSession>> startQuiz(String languageCode, int level) async {
+  Future<Either<Exception, QuizSession>> startQuiz(
+    String languageCode,
+    int level,
+  ) async {
     try {
       final session = await _remoteDataSource.startQuiz(languageCode, level);
       return Right(session);
@@ -32,6 +35,28 @@ class QuizRepositoryImpl implements QuizRepository {
         optionId: optionId,
         timeTaken: timeTaken,
       );
+      return Right(result);
+    } catch (e) {
+      return Left(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Exception, List<QuizQuestion>>> getPlacementQuestions() async {
+    try {
+      final questions = await _remoteDataSource.getPlacementQuestions();
+      return Right(questions);
+    } catch (e) {
+      return Left(Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Exception, Map<String, dynamic>>> submitPlacementTest(
+    int correctCount,
+  ) async {
+    try {
+      final result = await _remoteDataSource.submitPlacementTest(correctCount);
       return Right(result);
     } catch (e) {
       return Left(Exception(e.toString()));

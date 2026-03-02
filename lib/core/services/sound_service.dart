@@ -57,6 +57,8 @@ class SoundService extends ChangeNotifier {
   Future<void> playClick() => playSound('click');
   Future<void> playSuccess() => playSound('success');
   Future<void> playTick() => playSound('tick');
+  Future<void> playError() => playSound('wrong');
+  Future<void> playLevelUp() => playSound('level_up');
 
   Future<void> startBackgroundMusic() async {
     // If muted, we don't start playing, but we might want to prepare it?

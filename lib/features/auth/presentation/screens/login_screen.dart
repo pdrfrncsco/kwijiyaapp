@@ -98,14 +98,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       next.whenOrNull(
         data: (user) {
           if (user != null) {
-            context.go('/languages');
-          } else if (_isLoading && !_isOtpSent) {
-            // If we were loading (requestOtp) and user is still null, it means requestOtp succeeded
-            // But verifyOtp/guestLogin would set user != null
-            // Wait, requestOtp sets state to AsyncValue.data(null).
-            // This logic is tricky. requestOtp doesn't change User state to not-null.
-            // But verifyOtp does.
-            // So user != null means logged in.
+            if (user.placementTestCompleted) {
+              context.go('/languages');
+            } else {
+              context.go('/placement-test');
+            }
           }
         },
         error: (e, st) {
@@ -159,7 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _handleRequestOtp,
+                    onPressed: _isLoading ? null : () => _handleRequestOtp(),
                     child: _isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Receber Código'),
@@ -183,7 +180,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _handleVerifyOtp,
+                    onPressed: _isLoading ? null : () => _handleVerifyOtp(),
                     child: _isLoading
                         ? const CircularProgressIndicator()
                         : const Text('Entrar'),
@@ -203,7 +200,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const Divider(),
                 const SizedBox(height: 16),
                 OutlinedButton(
-                  onPressed: _isLoading ? null : _handleGuestLogin,
+                  onPressed: _isLoading ? null : () => _handleGuestLogin(),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: const BorderSide(color: AppColors.primary),

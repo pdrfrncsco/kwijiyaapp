@@ -9,6 +9,7 @@ import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../../features/languages/presentation/screens/language_selection_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/quiz/presentation/screens/quiz_screen.dart';
+import '../../features/quiz/presentation/screens/placement_test_screen.dart';
 import '../../features/rankings/presentation/screens/ranking_screen.dart';
 
 part 'app_router.g.dart';
@@ -38,6 +39,10 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/placement-test',
+        builder: (context, state) => const PlacementTestScreen(),
       ),
       GoRoute(
         path: '/quiz/:languageCode/:level',

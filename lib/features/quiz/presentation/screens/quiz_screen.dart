@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:confetti/confetti.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/core_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -158,11 +161,74 @@ class _QuizSummaryView extends ConsumerStatefulWidget {
 }
 
 class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
+  late ConfettiController _confettiController;
+
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
     ref.read(soundServiceProvider).stopBackgroundMusic();
-    ref.read(soundServiceProvider).playSuccess();
+
+    // Check level up
+    final leveledUp = widget.summary['leveled_up'] == true;
+    if (leveledUp) {
+      ref.read(soundServiceProvider).playLevelUp();
+      _confettiController.play();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showLevelUpDialog();
+      });
+    } else {
+      ref.read(soundServiceProvider).playSuccess();
+    }
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _showLevelUpDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/level_up.json',
+              width: 150,
+              height: 150,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.star, size: 80, color: Colors.amber),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Subiu de Nível!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Parabéns pelo seu progresso!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Continuar'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -173,64 +239,87 @@ class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
     final correct = widget.summary['correct'] ?? 0;
     final total = widget.summary['total'] ?? 0;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.check_circle, size: 80, color: AppColors.success),
-            const SizedBox(height: 24),
-            const Text(
-              'Sessão Concluída!',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Você acertou $correct de $total questões!',
-              style: const TextStyle(
-                fontSize: 16,
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Stack(
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _SummaryItem(
-                  icon: Icons.star,
-                  color: AppColors.primary,
-                  label: 'XP Ganho',
-                  value: '+$totalXp',
+                const Icon(
+                  Icons.check_circle,
+                  size: 80,
+                  color: AppColors.success,
                 ),
-                _SummaryItem(
-                  icon: Icons.monetization_on,
-                  color: Colors.amber,
-                  label: 'Makuta',
-                  value: '+$totalMakuta',
+                const SizedBox(height: 24),
+                const Text(
+                  'Sessão Concluída!',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
-                _SummaryItem(
-                  icon: Icons.pie_chart,
-                  color: Colors.blue,
-                  label: 'Precisão',
-                  value: '${accuracy.toStringAsFixed(0)}%',
+                const SizedBox(height: 8),
+                Text(
+                  'Você acertou $correct de $total questões!',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _SummaryItem(
+                      icon: Icons.star,
+                      color: AppColors.primary,
+                      label: 'XP Ganho',
+                      value: '+$totalXp',
+                    ),
+                    _SummaryItem(
+                      icon: Icons.monetization_on,
+                      color: Colors.amber,
+                      label: 'Makuta',
+                      value: '+$totalMakuta',
+                    ),
+                    _SummaryItem(
+                      icon: Icons.pie_chart,
+                      color: Colors.blue,
+                      label: 'Precisão',
+                      value: '${accuracy.toStringAsFixed(0)}%',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 48),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: widget.onHome,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Voltar ao Início'),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 48),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: widget.onHome,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text('Voltar ao Início'),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple,
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

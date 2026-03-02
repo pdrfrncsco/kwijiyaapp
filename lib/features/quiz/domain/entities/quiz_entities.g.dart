@@ -7,10 +7,18 @@ part of 'quiz_entities.dart';
 // **************************************************************************
 
 _$QuizOptionImpl _$$QuizOptionImplFromJson(Map<String, dynamic> json) =>
-    _$QuizOptionImpl(id: json['id'] as String, text: json['text'] as String);
+    _$QuizOptionImpl(
+      id: json['id'] as String,
+      text: json['text'] as String,
+      isCorrect: json['is_correct'] as bool?,
+    );
 
 Map<String, dynamic> _$$QuizOptionImplToJson(_$QuizOptionImpl instance) =>
-    <String, dynamic>{'id': instance.id, 'text': instance.text};
+    <String, dynamic>{
+      'id': instance.id,
+      'text': instance.text,
+      'is_correct': instance.isCorrect,
+    };
 
 _$QuizQuestionImpl _$$QuizQuestionImplFromJson(Map<String, dynamic> json) =>
     _$QuizQuestionImpl(

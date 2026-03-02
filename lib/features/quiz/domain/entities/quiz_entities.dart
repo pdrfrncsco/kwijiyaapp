@@ -9,9 +9,11 @@ class QuizOption with _$QuizOption {
   const factory QuizOption({
     required String id,
     required String text,
+    @JsonKey(name: 'is_correct') bool? isCorrect,
   }) = _QuizOption;
 
-  factory QuizOption.fromJson(Map<String, dynamic> json) => _$QuizOptionFromJson(json);
+  factory QuizOption.fromJson(Map<String, dynamic> json) =>
+      _$QuizOptionFromJson(json);
 }
 
 @freezed
@@ -26,7 +28,8 @@ class QuizQuestion with _$QuizQuestion {
     required List<QuizOption> options,
   }) = _QuizQuestion;
 
-  factory QuizQuestion.fromJson(Map<String, dynamic> json) => _$QuizQuestionFromJson(json);
+  factory QuizQuestion.fromJson(Map<String, dynamic> json) =>
+      _$QuizQuestionFromJson(json);
 }
 
 @freezed
@@ -39,7 +42,8 @@ class QuizSession with _$QuizSession {
     required List<QuizQuestion> questions,
   }) = _QuizSession;
 
-  factory QuizSession.fromJson(Map<String, dynamic> json) => _$QuizSessionFromJson(json);
+  factory QuizSession.fromJson(Map<String, dynamic> json) =>
+      _$QuizSessionFromJson(json);
 }
 
 @freezed
@@ -51,9 +55,11 @@ class QuizResult with _$QuizResult {
     @JsonKey(name: 'correct_answer') String? correctAnswer,
     String? explanation,
     @JsonKey(name: 'cultural_note') String? culturalNote,
-    @JsonKey(name: 'session_progress') required Map<String, dynamic> sessionProgress,
+    @JsonKey(name: 'session_progress')
+    required Map<String, dynamic> sessionProgress,
     @JsonKey(name: 'session_summary') Map<String, dynamic>? sessionSummary,
   }) = _QuizResult;
 
-  factory QuizResult.fromJson(Map<String, dynamic> json) => _$QuizResultFromJson(json);
+  factory QuizResult.fromJson(Map<String, dynamic> json) =>
+      _$QuizResultFromJson(json);
 }

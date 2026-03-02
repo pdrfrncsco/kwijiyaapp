@@ -34,6 +34,8 @@ mixin _$User {
   int get streakDays => throw _privateConstructorUsedError;
   @JsonKey(name: 'age_group')
   String? get ageGroup => throw _privateConstructorUsedError;
+  @JsonKey(name: 'placement_test_completed')
+  bool get placementTestCompleted => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
@@ -60,6 +62,7 @@ abstract class $UserCopyWith<$Res> {
     int coins,
     @JsonKey(name: 'streak_days') int streakDays,
     @JsonKey(name: 'age_group') String? ageGroup,
+    @JsonKey(name: 'placement_test_completed') bool placementTestCompleted,
     String? avatar,
   });
 }
@@ -88,6 +91,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? coins = null,
     Object? streakDays = null,
     Object? ageGroup = freezed,
+    Object? placementTestCompleted = null,
     Object? avatar = freezed,
   }) {
     return _then(
@@ -128,6 +132,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
                 ? _value.ageGroup
                 : ageGroup // ignore: cast_nullable_to_non_nullable
                       as String?,
+            placementTestCompleted: null == placementTestCompleted
+                ? _value.placementTestCompleted
+                : placementTestCompleted // ignore: cast_nullable_to_non_nullable
+                      as bool,
             avatar: freezed == avatar
                 ? _value.avatar
                 : avatar // ignore: cast_nullable_to_non_nullable
@@ -156,6 +164,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
     int coins,
     @JsonKey(name: 'streak_days') int streakDays,
     @JsonKey(name: 'age_group') String? ageGroup,
+    @JsonKey(name: 'placement_test_completed') bool placementTestCompleted,
     String? avatar,
   });
 }
@@ -181,6 +190,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? coins = null,
     Object? streakDays = null,
     Object? ageGroup = freezed,
+    Object? placementTestCompleted = null,
     Object? avatar = freezed,
   }) {
     return _then(
@@ -221,6 +231,10 @@ class __$$UserImplCopyWithImpl<$Res>
             ? _value.ageGroup
             : ageGroup // ignore: cast_nullable_to_non_nullable
                   as String?,
+        placementTestCompleted: null == placementTestCompleted
+            ? _value.placementTestCompleted
+            : placementTestCompleted // ignore: cast_nullable_to_non_nullable
+                  as bool,
         avatar: freezed == avatar
             ? _value.avatar
             : avatar // ignore: cast_nullable_to_non_nullable
@@ -243,6 +257,8 @@ class _$UserImpl implements _User {
     required this.coins,
     @JsonKey(name: 'streak_days') required this.streakDays,
     @JsonKey(name: 'age_group') this.ageGroup,
+    @JsonKey(name: 'placement_test_completed')
+    this.placementTestCompleted = false,
     this.avatar,
   });
 
@@ -273,11 +289,14 @@ class _$UserImpl implements _User {
   @JsonKey(name: 'age_group')
   final String? ageGroup;
   @override
+  @JsonKey(name: 'placement_test_completed')
+  final bool placementTestCompleted;
+  @override
   final String? avatar;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, isGuest: $isGuest, totalXp: $totalXp, level: $level, coins: $coins, streakDays: $streakDays, ageGroup: $ageGroup, avatar: $avatar)';
+    return 'User(id: $id, email: $email, username: $username, isGuest: $isGuest, totalXp: $totalXp, level: $level, coins: $coins, streakDays: $streakDays, ageGroup: $ageGroup, placementTestCompleted: $placementTestCompleted, avatar: $avatar)';
   }
 
   @override
@@ -297,6 +316,8 @@ class _$UserImpl implements _User {
                 other.streakDays == streakDays) &&
             (identical(other.ageGroup, ageGroup) ||
                 other.ageGroup == ageGroup) &&
+            (identical(other.placementTestCompleted, placementTestCompleted) ||
+                other.placementTestCompleted == placementTestCompleted) &&
             (identical(other.avatar, avatar) || other.avatar == avatar));
   }
 
@@ -313,6 +334,7 @@ class _$UserImpl implements _User {
     coins,
     streakDays,
     ageGroup,
+    placementTestCompleted,
     avatar,
   );
 
@@ -341,6 +363,8 @@ abstract class _User implements User {
     required final int coins,
     @JsonKey(name: 'streak_days') required final int streakDays,
     @JsonKey(name: 'age_group') final String? ageGroup,
+    @JsonKey(name: 'placement_test_completed')
+    final bool placementTestCompleted,
     final String? avatar,
   }) = _$UserImpl;
 
@@ -368,6 +392,9 @@ abstract class _User implements User {
   @override
   @JsonKey(name: 'age_group')
   String? get ageGroup;
+  @override
+  @JsonKey(name: 'placement_test_completed')
+  bool get placementTestCompleted;
   @override
   String? get avatar;
 

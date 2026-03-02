@@ -43,4 +43,26 @@ class QuizRemoteDataSource {
       throw Exception('Failed to submit answer: $e');
     }
   }
+
+  Future<List<QuizQuestion>> getPlacementQuestions() async {
+    try {
+      final response = await _apiClient.dio.post('/quizzes/placement/start/');
+      final questionsData = response.data['questions'] as List;
+      return questionsData.map((e) => QuizQuestion.fromJson(e)).toList();
+    } catch (e) {
+      throw Exception('Failed to start placement test: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> submitPlacementTest(int correctCount) async {
+    try {
+      final response = await _apiClient.dio.post(
+        '/quizzes/placement/submit/',
+        data: {'correct_count': correctCount, 'total_questions': 5},
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to submit placement test: $e');
+    }
+  }
 }

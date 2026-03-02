@@ -41,7 +41,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (authState.hasValue) {
       final user = authState.value;
       if (user != null) {
-        context.go('/languages');
+        if (user.placementTestCompleted) {
+          context.go('/languages');
+        } else {
+          context.go('/placement-test');
+        }
       } else {
         context.go('/login');
       }
