@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/quiz_entities.dart';
+import '../../domain/entities/quiz_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/core_providers.dart';
 
@@ -10,6 +11,7 @@ class QuizQuestionView extends ConsumerStatefulWidget {
   final int totalQuestions;
   final int currentIndex;
   final bool isSubmitting;
+  final QuizConfig config;
   final void Function(String optionId, double timeTaken) onOptionSelected;
 
   const QuizQuestionView({
@@ -18,6 +20,7 @@ class QuizQuestionView extends ConsumerStatefulWidget {
     required this.totalQuestions,
     required this.currentIndex,
     required this.isSubmitting,
+    required this.config,
     required this.onOptionSelected,
   });
 
@@ -46,13 +49,15 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
   }
 
   void _startTimer() {
-    _totalTime = widget.question.difficulty == 1
-        ? 15.0
-        : widget.question.timerSeconds.toDouble();
+    // Use config timer
+    _totalTime = widget.config.timerSeconds.toDouble();
     _timeLeft = _totalTime;
 
     _timer = Timer.periodic(Duration(milliseconds: _tickIntervalMs), (timer) {
-      if (!mounted) return;
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
 
       final oldTime = _timeLeft;
       setState(() {
@@ -66,20 +71,24 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
       }
 
       if (_timeLeft <= 0) {
-        _timer.cancel();
+        timer.cancel();
+        // Handle timeout if needed, currently just stops
       }
     });
   }
 
   Color _getTimerColor() {
-    if (_timeLeft > 10) return AppColors.success; // Greenish/Safe
-    if (_timeLeft > 5) return Colors.amber; // Warning
-    return AppColors.error; // Critical
+    // Adjust warning thresholds based on total time
+    if (_timeLeft > _totalTime * 0.5) return AppColors.success;
+    if (_timeLeft > _totalTime * 0.25) return Colors.amber;
+    return AppColors.error;
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -132,7 +141,7 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
                 ),
               ),
               FractionallySizedBox(
-                widthFactor: _timeLeft / _totalTime,
+                widthFactor: _totalTime > 0 ? (_timeLeft / _totalTime) : 0,
                 child: Container(
                   height: 6,
                   decoration: BoxDecoration(
@@ -156,8 +165,8 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
           Text(
             widget.question.questionText,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 24,
+            style: TextStyle(
+              fontSize: 24 * widget.config.fontSizeMultiplier,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
               height: 1.3,
@@ -186,8 +195,8 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
                 ),
                 child: Text(
                   option.text,
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: TextStyle(
+                    fontSize: 18 * widget.config.fontSizeMultiplier,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,

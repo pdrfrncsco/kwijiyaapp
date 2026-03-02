@@ -9,7 +9,7 @@ class LanguageRemoteDataSource {
   Future<List<Language>> getLanguages() async {
     try {
       final response = await _apiClient.dio.get('/languages/');
-      
+
       // Handle pagination
       List data;
       if (response.data is Map && response.data.containsKey('results')) {

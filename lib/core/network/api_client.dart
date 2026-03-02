@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../constants/app_constants.dart';
+import 'auth_interceptor.dart';
+import 'error_interceptor.dart';
 import 'token_manager.dart';
 
 class ApiClient {
@@ -27,20 +29,10 @@ class ApiClient {
         ),
       ) {
     _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final token = await _tokenManager.getToken();
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-        onError: (DioException e, handler) {
-          // TODO: Handle global errors (e.g. 401 Unauthorized -> logout)
-          return handler.next(e);
-        },
-      ),
+      AuthInterceptor(dio: _dio, tokenManager: _tokenManager),
     );
+
+    _dio.interceptors.add(ErrorInterceptor());
 
     if (kDebugMode) {
       _dio.interceptors.add(

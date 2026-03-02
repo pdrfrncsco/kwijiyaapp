@@ -15,6 +15,7 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
   level: (json['level'] as num).toInt(),
   coins: (json['coins'] as num).toInt(),
   streakDays: (json['streak_days'] as num).toInt(),
+  ageGroup: json['age_group'] as String?,
   avatar: json['avatar'] as String?,
 );
 
@@ -28,5 +29,6 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'level': instance.level,
       'coins': instance.coins,
       'streak_days': instance.streakDays,
+      'age_group': instance.ageGroup,
       'avatar': instance.avatar,
     };

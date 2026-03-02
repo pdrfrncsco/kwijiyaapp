@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/core_providers.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../domain/entities/quiz_config.dart';
 import '../providers/quiz_providers.dart';
 import 'quiz_question_view.dart';
 import 'quiz_result_view.dart';
@@ -43,6 +45,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final quizState = ref.watch(quizControllerProvider);
+    final userAsync = ref.watch(authControllerProvider);
+    final user = userAsync.valueOrNull;
+    final config = QuizConfig.forAgeGroup(user?.ageGroup);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,6 +114,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             totalQuestions: session.totalQuestions,
             currentIndex: quizState.currentQuestionIndex,
             isSubmitting: quizState.isAnswerSubmitting,
+            config: config,
             onOptionSelected: (optionId, timeTaken) {
               ref
                   .read(quizControllerProvider.notifier)

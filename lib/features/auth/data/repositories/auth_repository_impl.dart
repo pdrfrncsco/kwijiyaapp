@@ -59,7 +59,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _tokenManager.clearToken();
+    await _tokenManager.clearTokens();
   }
 
   @override
@@ -69,20 +69,25 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<void> _saveTokens(Map<String, dynamic> data) async {
     String? accessToken;
+    String? refreshToken;
 
     // Check for nested 'tokens' object (Custom response)
     if (data.containsKey('tokens') && data['tokens'] is Map) {
       final tokens = data['tokens'] as Map<String, dynamic>;
       accessToken = tokens['access'];
+      refreshToken = tokens['refresh'];
     }
     // Check for direct 'access' key (Standard SimpleJWT)
     else if (data.containsKey('access')) {
       accessToken = data['access'];
+      refreshToken = data['refresh'];
     }
 
     if (accessToken != null) {
       await _tokenManager.saveToken(accessToken);
     }
-    // TODO: Handle refresh token if needed
+    if (refreshToken != null) {
+      await _tokenManager.saveRefreshToken(refreshToken);
+    }
   }
 }
