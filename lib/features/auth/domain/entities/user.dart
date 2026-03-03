@@ -16,6 +16,7 @@ class User with _$User {
     required int coins, // Makuta
     @JsonKey(name: 'streak_days') required int streakDays,
     @JsonKey(name: 'age_group') String? ageGroup,
+    @JsonKey(name: 'date_of_birth') String? dateOfBirth,
     @JsonKey(name: 'placement_test_completed')
     @Default(false)
     bool placementTestCompleted,

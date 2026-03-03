@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/core_providers.dart';
+import '../../../../core/widgets/parental_gate.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -84,6 +85,27 @@ class ProfileScreen extends ConsumerWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: AppColors.secondary,
+                      ),
+                    ),
+                  ),
+                ],
+                if (user.ageGroup == 'child') ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Text(
+                      'Modo Criança',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
                       ),
                     ),
                   ),
@@ -249,8 +271,15 @@ class ProfileScreen extends ConsumerWidget {
                   textColor: AppColors.error,
                   iconColor: AppColors.error,
                   onTap: () {
-                    ref.read(authControllerProvider.notifier).logout();
-                    context.go('/login');
+                    if (user.ageGroup == 'child') {
+                      ParentalGate.verify(context, () {
+                        ref.read(authControllerProvider.notifier).logout();
+                        context.go('/login');
+                      });
+                    } else {
+                      ref.read(authControllerProvider.notifier).logout();
+                      context.go('/login');
+                    }
                   },
                 ),
               ],

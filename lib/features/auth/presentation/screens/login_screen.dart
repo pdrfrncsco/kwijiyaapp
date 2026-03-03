@@ -98,7 +98,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       next.whenOrNull(
         data: (user) {
           if (user != null) {
-            if (user.placementTestCompleted) {
+            if (user.dateOfBirth == null && !user.isGuest) {
+              // New user or incomplete profile (skip for guests)
+              context.go('/profile-setup');
+            } else if (user.placementTestCompleted) {
               // User already completed placement test, go to language selection
               context.go('/languages');
             } else {

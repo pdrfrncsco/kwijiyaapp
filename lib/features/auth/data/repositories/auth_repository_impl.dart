@@ -58,6 +58,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Exception, User>> updateUserProfile(
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final user = await _remoteDataSource.updateUserProfile(data);
+      return Right(user);
+    } catch (e) {
+      return Left(Exception(e.toString()));
+    }
+  }
+
+  @override
   Future<void> logout() async {
     await _tokenManager.clearTokens();
   }

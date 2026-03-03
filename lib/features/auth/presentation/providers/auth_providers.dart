@@ -79,4 +79,21 @@ class AuthController extends _$AuthController {
     await repository.logout();
     state = const AsyncValue.data(null);
   }
+
+  Future<void> updateProfile(Map<String, dynamic> data) async {
+    final repository = ref.read(authRepositoryProvider);
+    // Keep current user while loading? Or show loading?
+    // state = const AsyncValue.loading();
+    // If we set loading, the UI might flicker or unmount.
+    // Better to let the UI handle loading state locally and just await this.
+    // But we want to update the global state with the new user.
+
+    final result = await repository.updateUserProfile(data);
+
+    // Only update state if successful
+    result.fold(
+      (l) => throw l, // Let UI handle error
+      (r) => state = AsyncValue.data(r),
+    );
+  }
 }

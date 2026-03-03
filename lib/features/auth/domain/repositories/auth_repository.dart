@@ -6,6 +6,7 @@ abstract class AuthRepository {
   Future<Either<Exception, User>> verifyOtp(String email, String otpCode);
   Future<Either<Exception, User>> guestLogin();
   Future<Either<Exception, User>> getUserProfile();
+  Future<Either<Exception, User>> updateUserProfile(Map<String, dynamic> data);
   Future<void> logout();
   Future<bool> isLoggedIn();
 }

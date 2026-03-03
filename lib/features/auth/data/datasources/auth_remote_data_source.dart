@@ -43,4 +43,13 @@ class AuthRemoteDataSource {
       throw Exception('Failed to get user profile: $e');
     }
   }
+
+  Future<User> updateUserProfile(Map<String, dynamic> data) async {
+    try {
+      final response = await _apiClient.dio.patch('/users/profile/', data: data);
+      return User.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update profile: $e');
+    }
+  }
 }

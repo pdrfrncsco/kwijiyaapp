@@ -14,7 +14,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('O que você quer aprender?'),
+        title: const Text('O que você quer jogar?'),
       ),
       body: languagesAsync.when(
         data: (languages) {
