@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../core/adaptive/age_mode.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/profile_setup_screen.dart';
@@ -28,6 +29,14 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/profile-setup',
         builder: (context, state) => const ProfileSetupScreen(),
+      ),
+      GoRoute(
+        path: '/age-selection',
+        builder: (context, state) => AgeSelectionPage(
+          onSelected: () {
+            context.go('/dashboard');
+          },
+        ),
       ),
       GoRoute(
         path: '/languages',
