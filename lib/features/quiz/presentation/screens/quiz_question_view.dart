@@ -33,10 +33,12 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
   late double _timeLeft;
   late double _totalTime;
   final int _tickIntervalMs = 100;
+  late List<QuizOption> _shuffledOptions;
 
   @override
   void initState() {
     super.initState();
+    _randomizeOptions();
     _startTimer();
   }
 
@@ -44,8 +46,13 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
   void didUpdateWidget(QuizQuestionView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.question.id != widget.question.id) {
+      _randomizeOptions();
       _startTimer();
     }
+  }
+
+  void _randomizeOptions() {
+    _shuffledOptions = List.of(widget.question.options)..shuffle();
   }
 
   void _startTimer() {
@@ -103,8 +110,6 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
 
   @override
   Widget build(BuildContext context) {
-    // Randomize options order - create a copy to avoid modifying the original list
-    final options = List.of(widget.question.options)..shuffle();
     final optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     return SingleChildScrollView(
@@ -177,7 +182,7 @@ class _QuizQuestionViewState extends ConsumerState<QuizQuestionView> {
             ),
           ),
           const SizedBox(height: 48),
-          ...options.asMap().entries.map((entry) {
+          ..._shuffledOptions.asMap().entries.map((entry) {
             final index = entry.key;
             final option = entry.value;
             final letter = index < optionLetters.length

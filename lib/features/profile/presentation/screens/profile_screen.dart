@@ -128,6 +128,71 @@ class ProfileScreen extends ConsumerWidget {
 
                 const SizedBox(height: 32),
 
+                // Badges Section
+                if (user.badges != null && user.badges!.isNotEmpty) ...[
+                  const Text(
+                    'Conquistas',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 80,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: user.badges!.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 16),
+                      itemBuilder: (context, index) {
+                        final badge = user.badges![index];
+                        // Assuming badge is a map or object, adjust as needed based on actual User entity
+                        // If badges is a list of strings (names) or objects
+                        return Tooltip(
+                          message:
+                              badge['description'] ??
+                              badge['name'] ??
+                              'Medalha',
+                          child: Container(
+                            width: 80,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.card,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  badge['icon'] ?? '🏆',
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  badge['name'] ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+
                 // Settings / Actions
                 Consumer(
                   builder: (context, ref, child) {

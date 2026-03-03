@@ -37,6 +37,7 @@ mixin _$User {
   @JsonKey(name: 'placement_test_completed')
   bool get placementTestCompleted => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>>? get badges => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,6 +65,7 @@ abstract class $UserCopyWith<$Res> {
     @JsonKey(name: 'age_group') String? ageGroup,
     @JsonKey(name: 'placement_test_completed') bool placementTestCompleted,
     String? avatar,
+    List<Map<String, dynamic>>? badges,
   });
 }
 
@@ -93,6 +95,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? ageGroup = freezed,
     Object? placementTestCompleted = null,
     Object? avatar = freezed,
+    Object? badges = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -140,6 +143,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
                 ? _value.avatar
                 : avatar // ignore: cast_nullable_to_non_nullable
                       as String?,
+            badges: freezed == badges
+                ? _value.badges
+                : badges // ignore: cast_nullable_to_non_nullable
+                      as List<Map<String, dynamic>>?,
           )
           as $Val,
     );
@@ -166,6 +173,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
     @JsonKey(name: 'age_group') String? ageGroup,
     @JsonKey(name: 'placement_test_completed') bool placementTestCompleted,
     String? avatar,
+    List<Map<String, dynamic>>? badges,
   });
 }
 
@@ -192,6 +200,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? ageGroup = freezed,
     Object? placementTestCompleted = null,
     Object? avatar = freezed,
+    Object? badges = freezed,
   }) {
     return _then(
       _$UserImpl(
@@ -239,6 +248,10 @@ class __$$UserImplCopyWithImpl<$Res>
             ? _value.avatar
             : avatar // ignore: cast_nullable_to_non_nullable
                   as String?,
+        badges: freezed == badges
+            ? _value._badges
+            : badges // ignore: cast_nullable_to_non_nullable
+                  as List<Map<String, dynamic>>?,
       ),
     );
   }
@@ -260,7 +273,8 @@ class _$UserImpl implements _User {
     @JsonKey(name: 'placement_test_completed')
     this.placementTestCompleted = false,
     this.avatar,
-  });
+    final List<Map<String, dynamic>>? badges = const [],
+  }) : _badges = badges;
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -293,10 +307,20 @@ class _$UserImpl implements _User {
   final bool placementTestCompleted;
   @override
   final String? avatar;
+  final List<Map<String, dynamic>>? _badges;
+  @override
+  @JsonKey()
+  List<Map<String, dynamic>>? get badges {
+    final value = _badges;
+    if (value == null) return null;
+    if (_badges is EqualUnmodifiableListView) return _badges;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, isGuest: $isGuest, totalXp: $totalXp, level: $level, coins: $coins, streakDays: $streakDays, ageGroup: $ageGroup, placementTestCompleted: $placementTestCompleted, avatar: $avatar)';
+    return 'User(id: $id, email: $email, username: $username, isGuest: $isGuest, totalXp: $totalXp, level: $level, coins: $coins, streakDays: $streakDays, ageGroup: $ageGroup, placementTestCompleted: $placementTestCompleted, avatar: $avatar, badges: $badges)';
   }
 
   @override
@@ -318,7 +342,8 @@ class _$UserImpl implements _User {
                 other.ageGroup == ageGroup) &&
             (identical(other.placementTestCompleted, placementTestCompleted) ||
                 other.placementTestCompleted == placementTestCompleted) &&
-            (identical(other.avatar, avatar) || other.avatar == avatar));
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
+            const DeepCollectionEquality().equals(other._badges, _badges));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -336,6 +361,7 @@ class _$UserImpl implements _User {
     ageGroup,
     placementTestCompleted,
     avatar,
+    const DeepCollectionEquality().hash(_badges),
   );
 
   /// Create a copy of User
@@ -366,6 +392,7 @@ abstract class _User implements User {
     @JsonKey(name: 'placement_test_completed')
     final bool placementTestCompleted,
     final String? avatar,
+    final List<Map<String, dynamic>>? badges,
   }) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -397,6 +424,8 @@ abstract class _User implements User {
   bool get placementTestCompleted;
   @override
   String? get avatar;
+  @override
+  List<Map<String, dynamic>>? get badges;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.

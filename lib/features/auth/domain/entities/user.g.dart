@@ -18,6 +18,11 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
   ageGroup: json['age_group'] as String?,
   placementTestCompleted: json['placement_test_completed'] as bool? ?? false,
   avatar: json['avatar'] as String?,
+  badges:
+      (json['badges'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
@@ -33,4 +38,5 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'age_group': instance.ageGroup,
       'placement_test_completed': instance.placementTestCompleted,
       'avatar': instance.avatar,
+      'badges': instance.badges,
     };

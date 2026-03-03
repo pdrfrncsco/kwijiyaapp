@@ -41,7 +41,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   @override
   void dispose() {
-    ref.read(soundServiceProvider).stopBackgroundMusic();
+    ref.read(soundServiceProvider).stopAll();
     super.dispose();
   }
 
@@ -260,7 +260,7 @@ class _QuizSummaryViewState extends ConsumerState<_QuizSummaryView> {
                 const SizedBox(height: 24),
                 Text(
                   widget.summary['leveled_up'] == true
-                      ? 'Nível Subiu!'
+                      ? 'Subiu de Nível!'
                       : 'Sessão Concluída!',
                   style: const TextStyle(
                     fontSize: 28,

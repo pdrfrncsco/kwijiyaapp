@@ -47,6 +47,12 @@ class QuizRemoteDataSource {
   Future<List<QuizQuestion>> getPlacementQuestions() async {
     try {
       final response = await _apiClient.dio.post('/quizzes/placement/start/');
+
+      // Check if user already completed the test
+      if (response.data['completed'] == true) {
+        return [];
+      }
+
       final questionsData = response.data['questions'] as List;
       return questionsData.map((e) => QuizQuestion.fromJson(e)).toList();
     } catch (e) {

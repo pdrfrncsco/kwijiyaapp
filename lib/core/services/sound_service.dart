@@ -58,7 +58,8 @@ class SoundService extends ChangeNotifier {
   Future<void> playSuccess() => playSound('success');
   Future<void> playTick() => playSound('tick');
   Future<void> playError() => playSound('wrong');
-  Future<void> playLevelUp() => playSound('level_up');
+  // Fallback to success sound since level_up.mp3 is missing
+  Future<void> playLevelUp() => playSound('success');
 
   Future<void> startBackgroundMusic() async {
     // If muted, we don't start playing, but we might want to prepare it?
@@ -78,5 +79,10 @@ class SoundService extends ChangeNotifier {
 
   Future<void> stopBackgroundMusic() async {
     await _musicPlayer.stop();
+  }
+
+  Future<void> stopAll() async {
+    await _musicPlayer.stop();
+    await _sfxPlayer.stop();
   }
 }

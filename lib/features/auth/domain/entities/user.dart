@@ -20,6 +20,7 @@ class User with _$User {
     @Default(false)
     bool placementTestCompleted,
     String? avatar,
+    @Default([]) List<Map<String, dynamic>>? badges,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
